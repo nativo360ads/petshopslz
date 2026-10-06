@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PetCare - Pet Shop & Clínica Veterinária</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#fff7ed',
+              100: '#ffedd5',
+              200: '#fed7aa',
+              500: '#f97316',
+              600: '#ea580c',
+              700: '#c2410c'
+            },
+            tealpet: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Fredoka"', 'cursive']
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-amber-50/40 text-slate-800 font-sans min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-white">
+
+  <!-- TOPO / HEADER -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-orange-100 shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20">
+        <!-- Logo -->
+        <a href="#inicio" onclick="switchTab('inicio')" class="flex items-center gap-2.5 sm:gap-3 group cursor-pointer">
+          <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-brand-500 to-amber-400 flex items-center justify-center text-white shadow-md shadow-brand-500/25 group-hover:scale-105 transition-transform shrink-0">
+            <i data-lucide="paw-print" class="w-5 h-5 sm:w-7 sm:h-7"></i>
+          </div>
+          <div>
+            <span class="font-display text-xl sm:text-2xl font-bold tracking-tight text-slate-900 group-hover:text-brand-600 transition-colors">
+              Pet<span class="text-brand-500">Care</span>
+            </span>
+            <p class="hidden sm:block text-[11px] font-semibold text-slate-400 tracking-wider uppercase">Amor & Cuidado Animal</p>
+          </div>
+        </a>
+
+        <!-- NAVEGAÇÃO POR ABAS (DESKTOP) -->
+        <nav class="hidden md:flex items-center gap-1 p-1.5 bg-orange-50/80 rounded-2xl border border-orange-100/80">
+          <button class="nav-tab active-tab" data-target="inicio" onclick="switchTab('inicio')">
+            <i data-lucide="home" class="w-4 h-4"></i>
+            <span>Início</span>
+          </button>
+          <button class="nav-tab" data-target="servicos" onclick="switchTab('servicos')">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <span>Serviços</span>
+          </button>
+          <button class="nav-tab" data-target="produtos" onclick="switchTab('produtos')">
+            <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+            <span>Loja Pet</span>
+          </button>
+          <button class="nav-tab" data-target="agendamento" onclick="switchTab('agendamento')">
+            <i data-lucide="calendar" class="w-4 h-4"></i>
+            <span>Agendamento</span>
+          </button>
+          <button class="nav-tab" data-target="galeria" onclick="switchTab('galeria')">
+            <i data-lucide="camera" class="w-4 h-4"></i>
+            <span>Galeria</span>
+          </button>
+          <button class="nav-tab" data-target="contato" onclick="switchTab('contato')">
+            <i data-lucide="map-pin" class="w-4 h-4"></i>
+            <span>Contato</span>
+          </button>
+        </nav>
+
+        <!-- AÇÕES DO HEADER -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <button onclick="toggleCartModal()" class="relative p-2.5 rounded-xl bg-orange-50 text-slate-700 hover:bg-orange-100 hover:text-brand-600 transition duration-200" title="Ver Carrinho">
+            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+            <span id="cart-counter" class="absolute -top-1 -right-1 bg-brand-500 text-white text-[10px] font-bold w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center scale-0 transition-transform">0</span>
+          </button>
+          <button onclick="switchTab('agendamento')" class="hidden sm:inline-flex items-center gap-2 bg-gradient-to-r from-brand-500 to-amber-500 hover:from-brand-600 hover:to-amber-600 text-white font-semibold text-sm px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl shadow-md shadow-brand-500/20 hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+            <i data-lucide="clock" class="w-4 h-4"></i>
+            Agendar Agora
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABAS MOBILE (CARROSSEL HORIZONTAL SUPERIOR COM SCROLL SUAVE) -->
+    <div class="md:hidden flex items-center gap-2 px-3 sm:px-4 py-2 border-t border-orange-100 overflow-x-auto scrollbar-none bg-orange-50/70 backdrop-blur-sm">
+      <button class="mobile-nav-tab active-mobile-tab" data-target="inicio" onclick="switchTab('inicio')">🏠 Início</button>
+      <button class="mobile-nav-tab" data-target="servicos" onclick="switchTab('servicos')">✨ Serviços</button>
+      <button class="mobile-nav-tab" data-target="produtos" onclick="switchTab('produtos')">🛍️ Loja</button>
+      <button class="mobile-nav-tab" data-target="agendamento" onclick="switchTab('agendamento')">📅 Agendar</button>
+      <button class="mobile-nav-tab" data-target="galeria" onclick="switchTab('galeria')">📸 Galeria</button>
+      <button class="mobile-nav-tab" data-target="contato" onclick="switchTab('contato')">📍 Contato</button>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL (TELAS DAS ABAS) -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 pb-24 md:pb-8">
+
+    <!-- ============================================== -->
+    <!-- ABA 1: INÍCIO                                  -->
+    <!-- ============================================== -->
+    <section id="tab-inicio" class="tab-content block animate-fadeIn">
+      <!-- Hero Banner -->
+      <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-amber-500 via-brand-500 to-brand-600 text-white p-6 sm:p-10 lg:p-16 shadow-2xl mb-8 sm:mb-12">
+        <div class="absolute -right-20 -bottom-20 w-80 sm:w-96 h-80 sm:h-96 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -left-10 -top-10 w-60 sm:w-72 h-60 sm:h-72 bg-amber-300/20 rounded-full blur-2xl pointer-events-none"></div>
+
+        <div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          <div>
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-orange-100 text-xs font-semibold uppercase tracking-wider mb-4 sm:mb-5">
+              <i data-lucide="heart" class="w-3.5 h-3.5 fill-current text-rose-300"></i>
+              O melhor amigo do seu pet
+            </div>
+            <h1 class="font-display text-3xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-3 sm:mb-5">
+              Cuidado, carinho e saúde para o seu pet!
+            </h1>
+            <p class="text-orange-50 text-sm sm:text-lg max-w-xl mb-6 sm:mb-8 leading-relaxed">
+              Banho relaxante, tosa higiênica e estilizada, consultas veterinárias preventivas e uma loja cheia de novidades saborosas e divertidas.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <button onclick="switchTab('servicos')" class="w-full sm:w-auto px-6 sm:px-7 py-3.5 rounded-xl bg-white text-brand-600 font-bold text-sm shadow-xl hover:bg-orange-50 hover:shadow-2xl hover:scale-105 transition transform text-center">
+                Conhecer Nossos Serviços
+              </button>
+              <button onclick="switchTab('agendamento')" class="w-full sm:w-auto px-6 sm:px-7 py-3.5 rounded-xl bg-brand-700/60 hover:bg-brand-700 text-white font-semibold text-sm border border-white/20 backdrop-blur-sm transition text-center">
+                Fazer Agendamento Online
+              </button>
+            </div>
+
+            <!-- Mini estatísticas -->
+            <div class="grid grid-cols-3 gap-2 sm:gap-6 pt-6 sm:pt-8 mt-6 sm:mt-8 border-t border-white/20 text-center sm:text-left">
+              <div>
+                <p class="font-display text-xl sm:text-3xl font-bold">+5.000</p>
+                <p class="text-[11px] sm:text-xs text-orange-100">Pets atendidos</p>
+              </div>
+              <div>
+                <p class="font-display text-xl sm:text-3xl font-bold">100%</p>
+                <p class="text-[11px] sm:text-xs text-orange-100">Amor e carinho</p>
+              </div>
+              <div>
+                <p class="font-display text-xl sm:text-3xl font-bold">4.9 ★</p>
+                <p class="text-[11px] sm:text-xs text-orange-100">Nota no Google</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="relative flex justify-center">
+            <div class="relative w-full max-w-md">
+              <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=800&q=80" alt="Cão feliz recebendo carinho" class="rounded-2xl sm:rounded-3xl shadow-2xl object-cover w-full h-64 sm:h-80 lg:h-[400px] border-4 border-white/30 transform hover:scale-[1.01] transition duration-300">
+              <div class="absolute bottom-3 left-3 sm:-bottom-6 sm:-left-6 bg-white text-slate-800 p-3 sm:p-4 rounded-xl sm:rounded-2xl shadow-xl flex items-center gap-2.5 sm:gap-3 border border-orange-100">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-teal-100 text-teal-600 flex items-center justify-center shrink-0">
+                  <i data-lucide="shield-check" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+                </div>
+                <div>
+                  <p class="font-bold text-xs sm:text-sm">Veterinários 24h</p>
+                  <p class="text-[11px] sm:text-xs text-slate-500">Equipe de plantão</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Destaques Rápidos -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div class="bg-white p-6 rounded-2xl border border-orange-100 shadow-sm hover:shadow-md transition">
+          <div class="w-12 h-12 rounded-xl bg-orange-100 text-brand-600 flex items-center justify-center mb-4">
+            <i data-lucide="bath" class="w-6 h-6"></i>
+          </div>
+          <h3 class="font-bold text-lg text-slate-900 mb-2">Spa, Banho & Tosa</h3>
+          <p class="text-slate-600 text-sm leading-relaxed mb-4">
+            Água com temperatura controlada, secagem com proteção acústica e produtos hipoalergênicos de alta qualidade.
+          </p>
+          <button onclick="switchTab('servicos')" class="text-brand-600 font-semibold text-xs inline-flex items-center gap-1 hover:gap-2 transition-all">
+            Ver opções e preços <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-orange-100 shadow-sm hover:shadow-md transition">
+          <div class="w-12 h-12 rounded-xl bg-teal-100 text-tealpet-600 flex items-center justify-center mb-4">
+            <i data-lucide="stethoscope" class="w-6 h-6"></i>
+          </div>
+          <h3 class="font-bold text-lg text-slate-900 mb-2">Clínica Veterinária</h3>
+          <p class="text-slate-600 text-sm leading-relaxed mb-4">
+            Exames laboratoriais, vacinas importadas, microchipagem e consultas com profissionais especializados.
+          </p>
+          <button onclick="switchTab('servicos')" class="text-tealpet-600 font-semibold text-xs inline-flex items-center gap-1 hover:gap-2 transition-all">
+            Saiba mais <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-orange-100 shadow-sm hover:shadow-md transition">
+          <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center mb-4">
+            <i data-lucide="package-search" class="w-6 h-6"></i>
+          </div>
+          <h3 class="font-bold text-lg text-slate-900 mb-2">Boutique & Farmácia</h3>
+          <p class="text-slate-600 text-sm leading-relaxed mb-4">
+            Rações super premium, petiscos saudáveis, brinquedos interativos e medicamentos com entrega rápida.
+          </p>
+          <button onclick="switchTab('produtos')" class="text-amber-600 font-semibold text-xs inline-flex items-center gap-1 hover:gap-2 transition-all">
+            Acessar a loja <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Depoimentos de Tutores -->
+      <div class="bg-white rounded-3xl p-8 border border-orange-100 shadow-sm">
+        <div class="text-center max-w-xl mx-auto mb-8">
+          <h2 class="font-display text-2xl sm:text-3xl font-bold text-slate-900">O que os tutores dizem</h2>
+          <p class="text-slate-500 text-sm mt-1">A felicidade dos pets e a tranquilidade dos pais são nossa melhor recompensa.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-5 rounded-2xl bg-amber-50/50 border border-orange-100">
+            <div class="flex items-center gap-1 text-amber-400 mb-3">
+              ★★★★★
+            </div>
+            <p class="text-slate-600 text-sm italic mb-4">"O Bob odeia tomar banho em qualquer lugar, mas no PetCare ele volta feliz e cheiroso demais! Atendimento impecável."</p>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-brand-200 flex items-center justify-center font-bold text-brand-700 text-sm">MC</div>
+              <div>
+                <p class="font-semibold text-xs text-slate-900">Mariana Costa</p>
+                <p class="text-xs text-slate-400">Tutora do Bob (Golden)</p>
+              </div>
+            </div>
+          </div>
+          <div class="p-5 rounded-2xl bg-amber-50/50 border border-orange-100">
+            <div class="flex items-center gap-1 text-amber-400 mb-3">
+              ★★★★★
+            </div>
+            <p class="text-slate-600 text-sm italic mb-4">"A veterinária Dra. Camila foi extremamente atenciosa com a minha gatinha idosa. Salvou nossa rotina com o tratamento."</p>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-teal-200 flex items-center justify-center font-bold text-teal-800 text-sm">RA</div>
+              <div>
+                <p class="font-semibold text-xs text-slate-900">Rodrigo Alves</p>
+                <p class="text-xs text-slate-400">Tutor da Mel (Siamês)</p>
+              </div>
+            </div>
+          </div>
+          <div class="p-5 rounded-2xl bg-amber-50/50 border border-orange-100">
+            <div class="flex items-center gap-1 text-amber-400 mb-3">
+              ★★★★★
+            </div>
+            <p class="text-slate-600 text-sm italic mb-4">"Agendar pelo site é super prático e o serviço de leva e traz é muito pontual e seguro. Super recomendo a todos!"</p>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-orange-200 flex items-center justify-center font-bold text-orange-800 text-sm">FS</div>
+              <div>
+                <p class="font-semibold text-xs text-slate-900">Fernanda Silva</p>
+                <p class="text-xs text-slate-400">Tutora do Thor (Bulldog)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- ABA 2: SERVIÇOS                                -->
+    <!-- ============================================== -->
+    <section id="tab-servicos" class="tab-content hidden animate-fadeIn">
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <span class="text-xs uppercase font-bold tracking-wider text-brand-600 bg-orange-100 px-3 py-1 rounded-full">Nossas Especialidades</span>
+        <h2 class="font-display text-3xl sm:text-4xl font-bold text-slate-900 mt-3">Serviços pensados com carinho</h2>
+        <p class="text-slate-500 text-base mt-2">Profissionais certificados, estrutura climatizada e produtos de primeira linha para o bem-estar do seu pet.</p>
+      </div>
+
+      <!-- Grid de Serviços -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <!-- Serviço 1 -->
+        <div class="service-card bg-white rounded-3xl p-6 border border-orange-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+          <div>
+            <div class="w-full h-48 rounded-2xl overflow-hidden mb-5">
+              <img src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&w=600&q=80" alt="Banho e Tosa" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+            </div>
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="font-bold text-xl text-slate-900">Banho & Hidratação</h3>
+              <span class="text-brand-600 font-extrabold text-lg">R$ 55</span>
+            </div>
+            <p class="text-slate-600 text-sm mb-4">
+              Banho relaxante com shampoo neutro ou específico, hidratação profunda de pelos, corte de unhas e limpeza auricular.
+            </p>
+            <ul class="text-xs text-slate-500 space-y-1.5 mb-6">
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i> Secagem anti-ruído</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i> Laço ou gravata de brinde</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i> Perfume hipoalergênico</li>
+            </ul>
+          </div>
+          <button onclick="prefillSchedule('Banho & Hidratação')" class="w-full py-3 rounded-xl bg-orange-50 hover:bg-brand-500 text-brand-600 hover:text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2">
+            <i data-lucide="calendar" class="w-4 h-4"></i> Agendar este serviço
+          </button>
+        </div>
+
+        <!-- Serviço 2 -->
+        <div class="service-card bg-white rounded-3xl p-6 border border-orange-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+          <div>
+            <div class="w-full h-48 rounded-2xl overflow-hidden mb-5">
+              <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=600&q=80" alt="Tosa Higiênica e da Raça" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+            </div>
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="font-bold text-xl text-slate-900">Tosa Completa / da Raça</h3>
+              <span class="text-brand-600 font-extrabold text-lg">R$ 85</span>
+            </div>
+            <p class="text-slate-600 text-sm mb-4">
+              Tosa tesoura ou máquina conforme o padrão da raça do seu bichinho ou gosto do tutor. Estilo e conforto.
+            </p>
+            <ul class="text-xs text-slate-500 space-y-1.5 mb-6">
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i> Tosa higiênica inclusa</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i> Banho relaxante incluso</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i> Acabamento na tesoura</li>
+            </ul>
+          </div>
+          <button onclick="prefillSchedule('Tosa Completa / da Raça')" class="w-full py-3 rounded-xl bg-orange-50 hover:bg-brand-500 text-brand-600 hover:text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2">
+            <i data-lucide="calendar" class="w-4 h-4"></i> Agendar este serviço
+          </button>
+        </div>
+
+        <!-- Serviço 3 -->
+        <div class="service-card bg-white rounded-3xl p-6 border border-orange-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+          <div>
+            <div class="w-full h-48 rounded-2xl overflow-hidden mb-5">
+              <img src="https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?auto=format&fit=crop&w=600&q=80" alt="Consulta Veterinária" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+            </div>
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="font-bold text-xl text-slate-900">Consulta Veterinária</h3>
+              <span class="text-brand-600 font-extrabold text-lg">R$ 120</span>
+            </div>
+            <p class="text-slate-600 text-sm mb-4">
+              Avaliação clínica completa, escuta com carinho, diagnóstico preventivo e orientação nutricional especializada.
+            </p>
+            <ul class="text-xs text-slate-500 space-y-1.5 mb-6">
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i> Retorno em até 15 dias</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i> Histórico médico digital</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i> Pedido de exames na hora</li>
+            </ul>
+          </div>
+          <button onclick="prefillSchedule('Consulta Veterinária')" class="w-full py-3 rounded-xl bg-orange-50 hover:bg-brand-500 text-brand-600 hover:text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2">
+            <i data-lucide="calendar" class="w-4 h-4"></i> Agendar este serviço
+          </button>
+        </div>
+
+        <!-- Serviço 4 -->
+        <div class="service-card bg-white rounded-3xl p-6 border border-orange-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+          <div>
+            <div class="w-full h-48 rounded-2xl overflow-hidden mb-5">
+              <img src="https://images.unsplash.com/photo-1548767797-d8c844163c4c?auto=format&fit=crop&w=600&q=80" alt="Hotelzinho e Daycare" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+            </div>
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="font-bold text-xl text-slate-900">Hotelzinho & Creche</h3>
+              <span class="text-brand-600 font-extrabold text-lg">R$ 70 <span class="text-xs font-normal text-slate-400">/dia</span></span>
+            </div>
+            <p class="text-slate-600 text-sm mb-4">
+              Hospedagem segura sem gaiolas, com monitores 24h, rotina de brincadeiras e câmeras para você acompanhar tudo pelo celular.
+            </p>
+            <ul class="text-xs text-slate-500 space-y-1.5 mb-6">
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i> Socialização controlada</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i> Relatório diário no WhatsApp</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i> Ambiente 100% monitorado</li>
+            </ul>
+          </div>
+          <button onclick="prefillSchedule('Hotelzinho & Creche')" class="w-full py-3 rounded-xl bg-orange-50 hover:bg-brand-500 text-brand-600 hover:text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2">
+            <i data-lucide="calendar" class="w-4 h-4"></i> Agendar este serviço
+          </button>
+        </div>
+
+        <!-- Serviço 5 -->
+        <div class="service-card bg-white rounded-3xl p-6 border border-orange-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+          <div>
+            <div class="w-full h-48 rounded-2xl overflow-hidden mb-5">
+              <img src="https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&w=600&q=80" alt="Vacinação e Prevenção" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+            </div>
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="font-bold text-xl text-slate-900">Vacinação & Vermífugo</h3>
+              <span class="text-brand-600 font-extrabold text-lg">R$ 90</span>
+            </div>
+            <p class="text-slate-600 text-sm mb-4">
+              Vacinas V8, V10, Antirrábica, Gripe Canina e Quádrupla Felina. Carteira de vacinação digital atualizada.
+            </p>
+            <ul class="text-xs text-slate-500 space-y-1.5 mb-6">
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i> Vacinas importadas</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i> Avaliação prévia gratuita</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i> Lembrete das próximas doses</li>
+            </ul>
+          </div>
+          <button onclick="prefillSchedule('Vacinação & Vermífugo')" class="w-full py-3 rounded-xl bg-orange-50 hover:bg-brand-500 text-brand-600 hover:text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2">
+            <i data-lucide="calendar" class="w-4 h-4"></i> Agendar este serviço
+          </button>
+        </div>
+
+        <!-- Serviço 6 -->
+        <div class="service-card bg-white rounded-3xl p-6 border border-orange-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+          <div>
+            <div class="w-full h-48 rounded-2xl overflow-hidden mb-5">
+              <img src="https://images.unsplash.com/photo-1544568100-847a948585b9?auto=format&fit=crop&w=600&q=80" alt="Táxi Dog - Transporte" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+            </div>
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="font-bold text-xl text-slate-900">Leva & Traz (Táxi Dog)</h3>
+              <span class="text-brand-600 font-extrabold text-lg">R$ 25 <span class="text-xs font-normal text-slate-400">/trecho</span></span>
+            </div>
+            <p class="text-slate-600 text-sm mb-4">
+              Buscamos e entregamos seu peludo com toda segurança em veículo climatizado e com caixas de transporte higienizadas.
+            </p>
+            <ul class="text-xs text-slate-500 space-y-1.5 mb-6">
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i> Cintos e caixas seguras</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i> Motorista especializado em animais</li>
+              <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i> Pontualidade garantida</li>
+            </ul>
+          </div>
+          <button onclick="prefillSchedule('Leva & Traz (Táxi Dog)')" class="w-full py-3 rounded-xl bg-orange-50 hover:bg-brand-500 text-brand-600 hover:text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2">
+            <i data-lucide="calendar" class="w-4 h-4"></i> Agendar este serviço
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- ABA 3: LOJA PET / PRODUTOS                     -->
+    <!-- ============================================== -->
+    <section id="tab-produtos" class="tab-content hidden animate-fadeIn">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div>
+          <h2 class="font-display text-3xl font-bold text-slate-900">Nossa Loja Virtual</h2>
+          <p class="text-slate-500 text-sm">Alimentos selecionados, brinquedos resistentes e remédios confiáveis.</p>
+        </div>
+        
+        <!-- Filtros por categoria -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+          <button onclick="filterProducts('todos')" class="category-pill active-pill" data-category="todos">Todos</button>
+          <button onclick="filterProducts('racoes')" class="category-pill" data-category="racoes">Rações</button>
+          <button onclick="filterProducts('brinquedos')" class="category-pill" data-category="brinquedos">Brinquedos</button>
+          <button onclick="filterProducts('acessorios')" class="category-pill" data-category="acessorios">Acessórios</button>
+          <button onclick="filterProducts('farmacia')" class="category-pill" data-category="farmacia">Farmácia</button>
+        </div>
+      </div>
+
+      <!-- Grid de Produtos -->
+      <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
+        <!-- Injetado dinamicamente via script.js -->
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- ABA 4: AGENDAMENTO ONLINE                      -->
+    <!-- ============================================== -->
+    <section id="tab-agendamento" class="tab-content hidden animate-fadeIn">
+      <div class="max-w-3xl mx-auto">
+        <div class="text-center mb-8">
+          <span class="text-xs uppercase font-bold tracking-wider text-brand-600 bg-orange-100 px-3 py-1 rounded-full">Reserve em 1 Minuto</span>
+          <h2 class="font-display text-3xl sm:text-4xl font-bold text-slate-900 mt-3">Agende o horário do seu pet</h2>
+          <p class="text-slate-500 text-sm mt-1">Preencha os dados abaixo. Nós confirmamos no seu WhatsApp imediatamente!</p>
+        </div>
+
+        <div class="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-10 border border-orange-100 shadow-xl shadow-orange-950/5">
+          <form id="booking-form" onsubmit="handleBookingSubmit(event)">
+            <div class="space-y-6">
+              <!-- Dados do Tutor -->
+              <div>
+                <h4 class="font-bold text-sm uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-2">
+                  <i data-lucide="user" class="w-4 h-4 text-brand-500"></i> Dados do Tutor
+                </h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Seu Nome Completo *</label>
+                    <input type="text" id="tutor-name" required placeholder="Ex: Ana Clara Souza" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-sm">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">WhatsApp / Telefone *</label>
+                    <input type="tel" id="tutor-phone" required placeholder="(98) 98888-7777" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-sm">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Dados do Pet -->
+              <div class="pt-4 border-t border-slate-100">
+                <h4 class="font-bold text-sm uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-2">
+                  <i data-lucide="paw-print" class="w-4 h-4 text-brand-500"></i> Sobre o Pet
+                </h4>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Nome do Pet *</label>
+                    <input type="text" id="pet-name" required placeholder="Ex: Fred" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-sm">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Espécie *</label>
+                    <select id="pet-species" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-sm bg-white">
+                      <option value="Cachorro">🐶 Cachorro</option>
+                      <option value="Gato">🐱 Gato</option>
+                      <option value="Outro">🐾 Outro animal</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Porte do Pet</label>
+                    <select id="pet-size" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-sm bg-white">
+                      <option value="Pequeno (até 10kg)">Pequeno (até 10kg)</option>
+                      <option value="Médio (10kg a 25kg)">Médio (10kg a 25kg)</option>
+                      <option value="Grande (+25kg)">Grande (+25kg)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Serviço e Horário -->
+              <div class="pt-4 border-t border-slate-100">
+                <h4 class="font-bold text-sm uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-2">
+                  <i data-lucide="calendar" class="w-4 h-4 text-brand-500"></i> Escolha do Serviço e Data
+                </h4>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div class="sm:col-span-1">
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Serviço Desejado *</label>
+                    <select id="schedule-service" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-sm bg-white">
+                      <option value="Banho & Hidratação">Banho & Hidratação (R$ 55)</option>
+                      <option value="Tosa Completa / da Raça">Tosa Completa (R$ 85)</option>
+                      <option value="Consulta Veterinária">Consulta Veterinária (R$ 120)</option>
+                      <option value="Hotelzinho & Creche">Hotelzinho & Creche (R$ 70)</option>
+                      <option value="Vacinação & Vermífugo">Vacinação & Vermífugo (R$ 90)</option>
+                      <option value="Leva & Traz (Táxi Dog)">Leva & Traz (R$ 25)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Data Preferencial *</label>
+                    <input type="date" id="schedule-date" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-sm">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Horário Preferencial *</label>
+                    <select id="schedule-time" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-sm bg-white">
+                      <option value="09:00">09:00</option>
+                      <option value="10:30">10:30</option>
+                      <option value="13:30">13:30</option>
+                      <option value="15:00">15:00</option>
+                      <option value="16:30">16:30</option>
+                      <option value="18:00">18:00</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="mt-4">
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Observações Especiais (Alergias, temperamento, etc)</label>
+                  <textarea id="schedule-notes" rows="3" placeholder="Ex: O pet tem medo de secador forte, ou precisa de tosa na tesoura..." class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-sm"></textarea>
+                </div>
+              </div>
+
+              <!-- Opção de Leva e Traz -->
+              <div class="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-amber-50/70 border border-orange-200 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                  <div class="p-2 sm:p-2.5 rounded-xl bg-orange-100 text-brand-600 shrink-0">
+                    <i data-lucide="car" class="w-5 h-5"></i>
+                  </div>
+                  <div>
+                    <p class="font-bold text-xs sm:text-sm text-slate-800">Precisa do serviço Táxi Dog (Leva & Traz)?</p>
+                    <p class="text-[11px] sm:text-xs text-slate-500">Buscamos e levamos com segurança na sua residência.</p>
+                  </div>
+                </div>
+                <input type="checkbox" id="taxi-service" class="w-5 h-5 accent-brand-500 rounded cursor-pointer shrink-0">
+              </div>
+
+              <button type="submit" class="w-full py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-brand-500 to-amber-500 hover:from-brand-600 hover:to-amber-600 text-white font-bold text-sm sm:text-base shadow-lg shadow-brand-500/25 hover:shadow-xl hover:scale-[1.01] transition-all flex items-center justify-center gap-2 touch-manipulation">
+                <i data-lucide="calendar-check" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                Confirmar e Enviar Agendamento
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- ABA 5: GALERIA / FOTOS                         -->
+    <!-- ============================================== -->
+    <section id="tab-galeria" class="tab-content hidden animate-fadeIn">
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <span class="text-xs uppercase font-bold tracking-wider text-brand-600 bg-orange-100 px-3 py-1 rounded-full">Antes & Depois & Momentos</span>
+        <h2 class="font-display text-3xl sm:text-4xl font-bold text-slate-900 mt-3">Galeria de Fofuras</h2>
+        <p class="text-slate-500 text-base mt-2">Dê uma olhadinha em alguns dos nossos amiguinhos depois de um dia de cuidados no PetCare.</p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div class="relative group overflow-hidden rounded-2xl shadow-sm aspect-square bg-slate-100">
+          <img src="https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?auto=format&fit=crop&w=600&q=80" alt="Cachorrinho feliz" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition-opacity p-4 flex items-end">
+            <span class="text-white text-xs font-semibold">Tosa Poodle Toy - Fred</span>
+          </div>
+        </div>
+        <div class="relative group overflow-hidden rounded-2xl shadow-sm aspect-square bg-slate-100">
+          <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80" alt="Gato relaxado" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition-opacity p-4 flex items-end">
+            <span class="text-white text-xs font-semibold">Check-up Felino - Luna</span>
+          </div>
+        </div>
+        <div class="relative group overflow-hidden rounded-2xl shadow-sm aspect-square bg-slate-100">
+          <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=600&q=80" alt="Golden Retriever com banho" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition-opacity p-4 flex items-end">
+            <span class="text-white text-xs font-semibold">Hidratação de Ouro - Max</span>
+          </div>
+        </div>
+        <div class="relative group overflow-hidden rounded-2xl shadow-sm aspect-square bg-slate-100">
+          <img src="https://images.unsplash.com/photo-1535930891776-0c2dfb7fda1a?auto=format&fit=crop&w=600&q=80" alt="Cão com óculos" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition-opacity p-4 flex items-end">
+            <span class="text-white text-xs font-semibold">Dia de Spa - Pipoca</span>
+          </div>
+        </div>
+        <div class="relative group overflow-hidden rounded-2xl shadow-sm aspect-square bg-slate-100">
+          <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=600&q=80" alt="Bulldog na creche" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition-opacity p-4 flex items-end">
+            <span class="text-white text-xs font-semibold">Recreação na Creche - Bolt</span>
+          </div>
+        </div>
+        <div class="relative group overflow-hidden rounded-2xl shadow-sm aspect-square bg-slate-100">
+          <img src="https://images.unsplash.com/photo-1561037404-61cd46aa615b?auto=format&fit=crop&w=600&q=80" alt="Cãozinho curioso" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition-opacity p-4 flex items-end">
+            <span class="text-white text-xs font-semibold">Primeiro Banho - Bidu</span>
+          </div>
+        </div>
+        <div class="relative group overflow-hidden rounded-2xl shadow-sm aspect-square bg-slate-100">
+          <img src="https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&w=600&q=80" alt="Gato charmoso" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition-opacity p-4 flex items-end">
+            <span class="text-white text-xs font-semibold">Hospedagem Felina - Oliver</span>
+          </div>
+        </div>
+        <div class="relative group overflow-hidden rounded-2xl shadow-sm aspect-square bg-slate-100">
+          <img src="https://images.unsplash.com/photo-1598133894008-61f7fdb8cc3a?auto=format&fit=crop&w=600&q=80" alt="Cachorro pós tosa" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition-opacity p-4 flex items-end">
+            <span class="text-white text-xs font-semibold">Tosa Bebê Spitz - Mel</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- ABA 6: CONTATO & LOCALIZAÇÃO                   -->
+    <!-- ============================================== -->
+    <section id="tab-contato" class="tab-content hidden animate-fadeIn">
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <span class="text-xs uppercase font-bold tracking-wider text-brand-600 bg-orange-100 px-3 py-1 rounded-full">Fale Conosco</span>
+        <h2 class="font-display text-3xl sm:text-4xl font-bold text-slate-900 mt-3">Venha nos visitar ou mande uma mensagem</h2>
+        <p class="text-slate-500 text-base mt-2">Estamos prontos para atender você e seu pet com todo o amor e atenção.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Informações de Contato -->
+        <div class="space-y-6">
+          <div class="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-orange-100 shadow-sm space-y-5 sm:space-y-6">
+            <div class="flex items-start gap-3 sm:gap-4">
+              <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-orange-100 text-brand-600 flex items-center justify-center shrink-0">
+                <i data-lucide="map-pin" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-sm sm:text-base text-slate-900">Endereço</h4>
+                <p class="text-slate-600 text-xs sm:text-sm mt-0.5 sm:mt-1">Av. das Nações Unidas, 1200 - Jardins</p>
+                <p class="text-slate-400 text-[11px] sm:text-xs">São Paulo - SP, CEP 01402-000</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 sm:gap-4">
+              <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-teal-100 text-teal-600 flex items-center justify-center shrink-0">
+                <i data-lucide="phone-call" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-sm sm:text-base text-slate-900">Telefones & WhatsApp</h4>
+                <p class="text-slate-600 text-xs sm:text-sm mt-0.5 sm:mt-1">(98) 98215-7752 (Fixo / WhatsApp)</p>
+                <p class="text-brand-600 text-xs sm:text-sm font-semibold">(98) 98215-7752 (WhatsApp Direto)</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 sm:gap-4">
+              <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
+                <i data-lucide="clock" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-sm sm:text-base text-slate-900">Horário de Funcionamento</h4>
+                <p class="text-slate-600 text-xs sm:text-sm mt-0.5 sm:mt-1">Segunda a Sexta: 08:00 às 19:30</p>
+                <p class="text-slate-600 text-xs sm:text-sm">Sábado: 08:00 às 18:00</p>
+                <p class="text-emerald-600 text-[11px] sm:text-xs font-semibold mt-1">● Emergências Veterinárias: Plantão 24h</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botões rápidos de contato -->
+          <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <a href="https://wa.me/5598982157752?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20os%20serviços%20do%20PetCare." target="_blank" class="flex-1 py-3.5 sm:py-4 px-5 sm:px-6 rounded-xl sm:rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition touch-manipulation">
+              <i data-lucide="message-circle" class="w-5 h-5"></i>
+              Falar no WhatsApp
+            </a>
+            <button onclick="switchTab('agendamento')" class="flex-1 py-3.5 sm:py-4 px-5 sm:px-6 rounded-xl sm:rounded-2xl bg-brand-500 hover:bg-brand-600 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-brand-500/20 transition touch-manipulation">
+              <i data-lucide="calendar" class="w-5 h-5"></i>
+              Agendar Serviço
+            </button>
+          </div>
+        </div>
+
+        <!-- Formulário Rápido de Dúvidas -->
+        <div class="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-orange-100 shadow-sm">
+          <h3 class="font-display text-xl font-bold text-slate-900 mb-2">Envie uma mensagem</h3>
+          <p class="text-slate-500 text-xs mb-6">Tire dúvidas sobre tratamentos, produtos ou rações especiais.</p>
+
+          <form onsubmit="handleContactSubmit(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Seu Nome</label>
+              <input type="text" required placeholder="Como podemos te chamar?" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">E-mail ou Telefone</label>
+              <input type="text" required placeholder="Para respondermos você" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Mensagem</label>
+              <textarea rows="4" required placeholder="Escreva sua dúvida aqui..." class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm"></textarea>
+            </div>
+            <button type="submit" class="w-full py-3.5 rounded-xl bg-slate-900 hover:bg-black text-white font-semibold text-sm transition">
+              Enviar Mensagem
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL DO CARRINHO DE COMPRAS (BOTTOM-SHEET NO CELULAR / DIALOG NO DESKTOP) -->
+  <div id="cart-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-white rounded-t-3xl sm:rounded-3xl max-w-lg w-full max-h-[85vh] sm:max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-scaleUp">
+      <!-- Header do Carrinho -->
+      <div class="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i data-lucide="shopping-bag" class="w-5 h-5 text-brand-500"></i>
+          <h3 class="font-display text-lg sm:text-xl font-bold text-slate-900">Carrinho de Compras</h3>
+        </div>
+        <button onclick="toggleCartModal()" class="p-2 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-100" title="Fechar">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Conteúdo Rolável do Carrinho (Itens + Informações de Entrega e Pagamento) -->
+      <div class="overflow-y-auto p-4 sm:p-6 space-y-6 flex-1">
+        <!-- Lista de Produtos -->
+        <div>
+          <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-3 flex items-center justify-between">
+            <span class="flex items-center gap-1.5"><i data-lucide="package" class="w-4 h-4 text-brand-500"></i> Itens Selecionados</span>
+            <span id="cart-items-count-badge" class="text-slate-500 font-semibold normal-case">0 itens</span>
+          </h4>
+          <div id="cart-items" class="space-y-3">
+            <!-- Renderizado dinamicamente via script.js -->
+          </div>
+        </div>
+
+        <!-- Formulário de Informações do Pedido (Nome, Endereço, Pagamento) -->
+        <div id="cart-checkout-form" class="pt-5 border-t border-slate-100 space-y-4">
+          <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+            <i data-lucide="map-pin" class="w-4 h-4 text-brand-500"></i> Informações para Entrega
+          </h4>
+
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Seu Nome Completo *</label>
+              <input type="text" id="cart-customer-name" placeholder="Ex: Roberto Gomes" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">WhatsApp / Telefone *</label>
+              <input type="tel" id="cart-customer-phone" placeholder="Ex: (98) 98888-7777" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Modalidade de Entrega</label>
+              <div class="grid grid-cols-2 gap-2">
+                <label id="label-delivery-ship" class="flex items-center gap-2 p-2.5 rounded-xl border border-orange-200 bg-orange-50/50 cursor-pointer text-xs font-semibold text-slate-800 hover:border-brand-500 transition">
+                  <input type="radio" name="cart-delivery-type" value="Entrega em Domicílio" checked onchange="toggleDeliveryFields()" class="accent-brand-500">
+                  <span>🛵 Entrega</span>
+                </label>
+                <label id="label-delivery-pickup" class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-white cursor-pointer text-xs font-semibold text-slate-700 hover:border-brand-500 transition">
+                  <input type="radio" name="cart-delivery-type" value="Retirada no Pet Shop" onchange="toggleDeliveryFields()" class="accent-brand-500">
+                  <span>🏬 Retirar na Loja</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Campos de Endereço (visíveis na entrega) -->
+            <div id="cart-address-wrapper" class="space-y-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Endereço Completo (Rua, Nº e Bairro) *</label>
+                <input type="text" id="cart-customer-address" placeholder="Ex: Av. Jerônimo de Albuquerque, 450 - Vinhais" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Complemento / Ponto de Referência</label>
+                <input type="text" id="cart-customer-complement" placeholder="Ex: Apto 102, Bloco C / Próximo à padaria" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+              </div>
+            </div>
+
+            <!-- Forma de Pagamento -->
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Forma de Pagamento *</label>
+              <select id="cart-payment-method" onchange="togglePaymentChangeField()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm bg-white text-slate-800">
+                <option value="PIX">⚡ PIX (Chave enviada no WhatsApp)</option>
+                <option value="Cartão de Crédito (na entrega)">💳 Cartão de Crédito (Máquina na entrega)</option>
+                <option value="Cartão de Débito (na entrega)">💳 Cartão de Débito (Máquina na entrega)</option>
+                <option value="Dinheiro">💵 Dinheiro</option>
+              </select>
+            </div>
+
+            <!-- Campo de Troco (aparece se Dinheiro selecionado) -->
+            <div id="cart-change-wrapper" class="hidden">
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Precisa de troco para quanto?</label>
+              <input type="text" id="cart-change-amount" placeholder="Ex: Troco para R$ 100,00 (ou 'Não preciso')" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+            </div>
+
+            <!-- Observações -->
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Observações do Pedido (Opcional)</label>
+              <input type="text" id="cart-order-notes" placeholder="Ex: Tocar campainha / entregar após 14h" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rodapé do Carrinho -->
+      <div class="p-4 sm:p-6 bg-slate-50 border-t border-slate-100">
+        <div class="flex items-center justify-between mb-3 sm:mb-4">
+          <span class="text-xs sm:text-sm font-semibold text-slate-600">Total a pagar:</span>
+          <span id="cart-total-price" class="text-xl sm:text-2xl font-black text-brand-600">R$ 0,00</span>
+        </div>
+        <button onclick="checkoutCart()" class="w-full py-3 sm:py-3.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-bold text-sm shadow-md transition flex items-center justify-center gap-2">
+          <i data-lucide="check-circle" class="w-4 h-4"></i> Finalizar Pedido via WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION (ADAPTADO PARA NÃO COLIDIR COM A BARRA MOBILE) -->
+  <div id="toast" class="fixed bottom-20 sm:bottom-6 right-3 left-3 sm:left-auto sm:right-6 z-50 bg-slate-900/95 backdrop-blur text-white px-4 sm:px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 transform translate-y-28 opacity-0 transition-all duration-300 pointer-events-none">
+    <i id="toast-icon" data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400 shrink-0"></i>
+    <span id="toast-message" class="text-xs sm:text-sm font-medium">Item adicionado!</span>
+  </div>
+
+  <!-- FOOTER COM SAFE-AREA PARA MOBILE -->
+  <footer class="bg-white border-t border-orange-100 mt-16 sm:mt-20 pb-28 md:pb-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <div class="md:col-span-2">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-brand-500 flex items-center justify-center text-white">
+              <i data-lucide="paw-print" class="w-6 h-6"></i>
+            </div>
+            <span class="font-display text-2xl font-bold text-slate-900">Pet<span class="text-brand-500">Care</span></span>
+          </div>
+          <p class="text-slate-500 text-sm max-w-sm">
+            Dedicados a cuidar da felicidade e saúde dos pets como membros da família desde 2018.
+          </p>
+        </div>
+        <div>
+          <h4 class="font-bold text-sm text-slate-900 mb-3">Links Rápidos</h4>
+          <ul class="space-y-2 text-sm text-slate-600">
+            <li><button onclick="switchTab('servicos')" class="hover:text-brand-500">Banho & Tosa</button></li>
+            <li><button onclick="switchTab('servicos')" class="hover:text-brand-500">Veterinário</button></li>
+            <li><button onclick="switchTab('produtos')" class="hover:text-brand-500">Loja de Rações</button></li>
+            <li><button onclick="switchTab('agendamento')" class="hover:text-brand-500">Agendar Horário</button></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-bold text-sm text-slate-900 mb-3">Atendimento</h4>
+          <p class="text-slate-600 text-sm mb-1">(98) 98215-7752</p>
+          <p class="text-slate-600 text-sm mb-3">contato@petcaresp.com.br</p>
+          <div class="flex items-center gap-3 text-slate-400">
+            <a href="#" class="hover:text-brand-500"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+            <a href="#" class="hover:text-brand-500"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+            <a href="#" class="hover:text-brand-500"><i data-lucide="youtube" class="w-5 h-5"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-slate-100 pt-6 text-center text-xs text-slate-400">
+        © 2026 PetCare Pet Shop & Clínica Veterinária. Todos os direitos reservados.
+      </div>
+    </div>
+  </footer>
+
+  <!-- BARRA DE NAVEGAÇÃO INFERIOR FIXA (MOBILE / ESTILO APP) -->
+  <nav class="mobile-bottom-nav md:hidden">
+    <button type="button" class="bottom-nav-item active-bottom-nav" data-target="inicio" onclick="switchTab('inicio')">
+      <i data-lucide="home" class="w-5 h-5"></i>
+      <span>Início</span>
+    </button>
+    <button type="button" class="bottom-nav-item" data-target="servicos" onclick="switchTab('servicos')">
+      <i data-lucide="sparkles" class="w-5 h-5"></i>
+      <span>Serviços</span>
+    </button>
+    <button type="button" class="bottom-nav-item bottom-nav-fab" data-target="agendamento" onclick="switchTab('agendamento')">
+      <div class="fab-circle">
+        <i data-lucide="calendar" class="w-5 h-5"></i>
+      </div>
+      <span class="text-brand-600 font-bold">Agendar</span>
+    </button>
+    <button type="button" class="bottom-nav-item" data-target="produtos" onclick="switchTab('produtos')">
+      <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+      <span>Loja</span>
+    </button>
+    <button type="button" class="bottom-nav-item" data-target="contato" onclick="switchTab('contato')">
+      <i data-lucide="map-pin" class="w-5 h-5"></i>
+      <span>Contato</span>
+    </button>
+  </nav>
+
+  <script src="script.js"></script>
+</body>
+</html>
